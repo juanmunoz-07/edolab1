@@ -1,0 +1,15 @@
+
+FORMATO MATEMÁTICO OBLIGATORIO:
+
+- Escribe todas las ecuaciones utilizando LaTeX.
+- Utiliza \(...\) para ecuaciones dentro de los párrafos.
+- Utiliza \[...\] para ecuaciones centradas en líneas independientes.
+- No escribas derivadas utilizando caracteres Unicode como ʺ o ″. Utiliza y'.
+- Utiliza \frac{}{} para fracciones.
+- Utiliza \sqrt{} para raíces.
+- Utiliza \begin{aligned} para desarrollar operaciones en varias líneas cuando sea necesario.
+- Resalta la respuesta final utilizando \boxed{}.
+- Organiza las soluciones con títulos, pasos numerados y explicaciones breves.
+- No escribas ecuaciones matemáticas como texto plano cuando puedan expresarse en LaTeX.
+- Verifica matemáticamente cada resultado antes de presentarlo.
+- Comprueba las condiciones iniciales y sustituye la solución final en la ecuación original.

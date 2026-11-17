@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- MathJax para mostrar las ecuaciones LaTeX del asistente -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['\\(', '\\)']],
+      displayMath: [['\\[', '\\]'], ['$$', '$$']]
+    },
+    options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <title>EDO LAB · Ecuaciones diferenciales</title>
+    <meta name="description" content="EDO LAB: plataforma interactiva para resolver, graficar y aprender ecuaciones diferenciales ordinarias paso a paso.">
+    <meta name="theme-color" content="#7965d8">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%237965d8'/%3E%3Ctext x='32' y='45' font-size='38' text-anchor='middle' fill='white' font-family='serif'%3E%E2%88%82%3C/text%3E%3C/svg%3E">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Librerías con versión fija y CDN de respaldo (si jsDelivr falla se usa unpkg) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.js" onerror="document.write('<script src=\'https://unpkg.com/chart.js@4.4.7/dist/chart.umd.js\'><\/script>')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjs@13.2.2/lib/browser/math.js" onerror="document.write('<script src=\'https://unpkg.com/mathjs@13.2.2/lib/browser/math.js\'><\/script>')"></script>
+    <link rel="stylesheet" href="styles.css?v=7">
+    <link rel="stylesheet" href="extra.css?v=7">
+</head>
+
+<body>
+    <noscript><div class="lib-banner">EDO LAB necesita JavaScript activado para funcionar.</div></noscript>
+    <div class="lib-banner" id="libBanner" hidden>No se pudieron cargar las librerías de gráficas y matemáticas (revisa tu conexión a Internet y recarga la página).</div>
+    <div class="overlay" id="overlay"></div>
+    <div class="app-shell">
+        <aside class="sidebar" id="sidebar" aria-label="Navegación principal">
+            <a class="brand" href="#overview">
+                <span class="brand-icon" aria-hidden="true">∂</span>
+                <span>
+                    EDO<span class="brand-light">LAB</span>
+                    <small>MATEMÁTICA APLICADA</small>
+                </span>
+            </a>
+            <div class="side-label">ESPACIO DE TRABAJO</div>
+            <nav class="side-nav">
+                <a class="nav-item active" href="#overview"><span>◫</span>
+                    Panel general </a>
+                <a class="nav-item" href="#resolver">
+                    <span>∑</span>
+                    Resolver ecuación</a>
+                <a class="nav-item" href="#explorar">
+                    <span>⌁</span>
+                    Explorador gráfico</a>
+                <a class="nav-item" href="#biblioteca">
+                    <span>▤</span>
+                    Biblioteca de EDO </a>
+            </nav>
+            <div class="side-label">APRENDIZAJE</div>
+            <nav class="side-nav">
+                <a class="nav-item" href="#conceptos"><span>◉</span> Conceptos básicos</a>
+                <a class="nav-item" href="#metodos"><span>◈</span> Métodos de solución</a>
+                <a class="nav-item" href="#practica"><span>✎</span> Práctica</a>
+                <a class="nav-item" href="#simulador"><span>〰</span> Simulador</a>
+                <a class="nav-item" href="#asistente"><span>✧</span> Asistente IA <em>Nuevo</em></a>
+            </nav>
+            <div class="sidebar-bottom">
+                <div class="help-icon">?</div>
+                <strong>¿Necesitas una guía?</strong>
+                <p>
+                    Aprende a plantear y resolver ecuaciones paso a paso.
+                </p>
+                <a href="#conceptos">Ver fundamentos →</a>
+                <div class="profile">
+                    <div class="avatar">∂</div>
+                    <div>
+                        <b>Mi laboratorio</b>
+                        <small>Estudiante</small>
+                    </div>
+                    <span class="dots">•••</span>
+                </div>
+            </div>
+        </aside>
+        <main class="main-area">
+            <header class="topbar">
+                <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">☰</button>
+                <div class="crumb">
+                    Laboratorio
+                    <span>/</span>
+                    <b id="crumbCurrent">Panel general</b>
+                </div>
+                <div class="top-actions">
+                    <span class="status-dot"></span>
+                    <span class="online-label">Entorno interactivo</span>
+                    <a class="round-btn" href="#conceptos" title="Ayuda: conceptos básicos" aria-label="Ayuda">?</a>
+                    <div class="mini-avatar">JD</div>
+                </div>
+            </header>
+            <div class="content" id="overview">
+                <section class="welcome-row">
+
+                    <div>
+                        <div class="eyebrow">
+                            <span class="spark">✦</span>
+                            TU ESPACIO MATEMÁTICO
+                        </div>
+                        <h1>
+                            Te damos la bienvenida al
+                            <span>laboratorio.</span>
+                        </h1>
+                        <p>
+                            Plantea ecuaciones diferenciales, explora sus
+                            soluciones y comprende qué significan.
+                        </p>
+                    </div>
+                    <a class="primary-btn" href="#resolver">
+                        ＋ Nueva ecuación
+                        <span>↗</span>
+                    </a>
+                </section>
+                <section class="stats-grid">
+                    <article class="stat-card">
+                        <div class="stat-top">
+                            <span>Ecuaciones de ejemplo</span>
+                            <span class="stat-icon purple">∑</span>
+                        </div>
+                        <div class="stat-number" id="exCount">15</div>
+                        <div class="stat-foot">
+                            <span class="tiny-dot purple-dot"></span>
+                            Modelos listos para explorar
+                        </div>
+                    </article>
+                    <article class="stat-card">
+                        <div class="stat-top">
+                            <span>Tipos disponibles</span>
+                            <span class="stat-icon blue">⌘</span>
+                        </div>
+                        <div class="stat-number">1.º y 2.º</div>
+                        <div class="stat-foot">
+                            Primer y segundo orden
+                        </div>
+                    </article>
+                    <article class="stat-card">
+                        <div class="stat-top">
+                            <span>Herramientas</span>
+                            <span class="stat-icon pink">⌁</span>
+                        </div>
+                        <div class="stat-number">Gráficas</div>
+
+                        <div class="stat-foot">
+                            Visualiza el cambio en el tiempo
+                        </div>
+                    </article>
+                    <article class="stat-card ai-stat">
+                        <div class="stat-top">
+                            <span>Asistente inteligente</span>
+                            <span class="stat-icon violet">✧</span>
+                        </div>
+                        <div class="stat-number">Listo</div>
+
+                        <div class="stat-foot">
+                            <span class="tiny-dot purple-dot"></span>
+                            Motor matemático + tutor IA
+                        </div>
+                    </article>
+                </section>
+                <!-- PANEL PRINCIPAL -->
+                <section class="dashboard-grid">
+                    <article class="panel equation-panel" id="resolver">
+                        <div class="panel-heading">
+                            <div>
+                                <div class="eyebrow">ÁREA DE TRABAJO</div>
+                                <h2>Resolver una ecuación</h2>
+                                <p>
+                                    Escribe tu ecuación o selecciona un
+                                    ejemplo para comenzar.
+                                </p>
+                            </div>
+                            <span class="soft-pill">EDITOR DE EDO</span>
+                        </div>
+                        <label class="field-label" for="equationInput">
+                            Tu ecuación diferencial
+                        </label>
+                        <div class="equation-input-wrap">
+                            <span class="input-symbol">ƒ</span>
+                            <input id="equationInput" type="text" value="y' + 2y = 0" placeholder="Ej. y' + 2y = 0"
+                                autocomplete="off">
+                            <button id="clearEquation" class="clear-btn" title="Limpiar" aria-label="Limpiar ecuación" type="button">
+                                ×
+                            </button>
+                        </div>
+                        <div class="input-hint">
+                            Puedes escribir <code>y' + 2y = 0</code>, <code>dy/dt + 3y = 9</code>, <code>sen</code>, <code>e^(−t)</code> o productos como <code>t y</code>. Usa y'' para segundo orden.
+                        </div>
+                        <label class="field-label" for="ivpInput">Condiciones iniciales (opcional)</label>
+                        <div class="equation-input-wrap"><span class="input-symbol">y₀</span><input id="ivpInput" type="text" placeholder="Ej. y(0)=1, y'(0)=0" autocomplete="off" aria-label="Condiciones iniciales"></div>
+                        <div class="chip-row" id="history"></div>
+                        <div class="example-row">
+                            <label for="exampleSelect">Ejemplos</label>
+                            <select id="exampleSelect">
+                                <option value="decay">
+                                    y' + 2y = 0 · Decaimiento
+                                </option>
+                                <option value="growth">
+                                    y' - 3y = 0 · Crecimiento
+                                </option>
+                                <option value="newton">
+                                    T' = -0.4(T - 22) · Enfriamiento
+                                </option>
+                                <option value="second">
+                                    y'' + 4y = 0 · Oscilación
+                                </option>
+                            </select>
+                        </div>
+                        <div class="button-row">
+                            <button class="primary-btn" id="solveBtn">
+                                Resolver ecuación
+                                <span>→</span>
+                            </button>
+                            <button class="secondary-btn" id="askAI">Resolver con la IA ✧</button>
+                            <button class="secondary-btn" id="classifyBtn">
+                                Clasificar EDO
+                            </button>
+                        </div>
+                        <div class="notice" id="inputNotice" role="status" aria-live="polite">
+                            Prueba uno de los ejemplos para ver la solución
+                            explicada.
+                        </div>
+                        <div class="solution-area" id="solutionArea">
+                            <div class="solution-title">
+                                <span class="success-mark">✓</span>
+                                <div>
+                                    <b>Solución del modelo</b>
+                                    <small>
+                                        Calculado por el motor del laboratorio
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="solution-formula" id="solutionFormula">
+                                y(t) = Ce<sup>−2t</sup>
+                            </div>
+                            <div class="steps" id="solutionSteps">
+                                <div class="step">
+                                    <span>01</span>
+                                    <p>
+                                        <b>Identifica el tipo</b>
+                                        La ecuación es lineal, homogénea
+                                        y de primer orden.
+                                    </p>
+                                </div>
+                                <div class="step">
+                                    <span>02</span>
+                                    <p>
+                                        <b>Separa variables</b>
+                                        dy/y = −2 dt
+                                    </p>
+                                </div>
+
+                                <div class="step">
+                                    <span>03</span>
+
+                                    <p>
+                                        <b>Integra</b>
+                                        ln|y| = −2t + C₁
+                                    </p>
+                                </div>
+                                <div class="step">
+                                    <span>04</span>
+                                    <p>
+                                        <b>Escribe la solución general</b>
+                                        y(t) = Ce<sup>−2t</sup>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="classification" id="classification">
+                                <span>ORDEN <b>1</b></span>
+                                <span>GRADO <b>1</b></span>
+                                <span>LINEAL</span>
+                                <span>HOMOGÉNEA</span>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="panel chart-panel" id="explorar">
+                        <div class="panel-heading chart-heading">
+                            <div>
+                                <div class="eyebrow">VISUALIZACIÓN</div>
+                                <h2>Comportamiento de la solución</h2>
+                                <p>
+                                    Una mirada gráfica a la evolución de y(t).
+                                </p>
+                            </div>
+                            <button class="icon-button" id="resetChart" title="Restablecer gráfica" aria-label="Restablecer gráfica" type="button"> ↻
+                            </button>
+                        </div>
+                        <div class="chart-legend">
+                            <span>
+                                <i></i>
+                                Solución y(t)
+                            </span>
+                            <label class="legend-note range-pick">Rango de t
+                                <select id="tRange" aria-label="Rango de tiempo"><option value="5" selected>5</option><option value="10">10</option><option value="20">20</option></select>
+                            </label>
+                        </div>
+                        <div class="chart-wrap">
+                            <canvas id="solutionChart"></canvas>
+                        </div>
+                        <div class="chart-summary">
+                            <div>
+                                <small>Valor inicial y(t₀)</small>
+                                <b id="initialValue">1.00</b>
+                            </div>
+                            <div>
+                                <small>Tendencia</small>
+                                <b id="trendValue">Decreciente</b>
+                            </div>
+                            <div>
+                                <small>Intervalo</small>
+                                <b id="intervalValue">0 – 5</b>
+                            </div>
+                        </div>
+                        <div class="chart-note">
+                            <span>✦</span>
+                            <p id="chartNote">
+                                La gráfica representa una solución ilustrativa.
+                                Si no se define una condición inicial, la
+                                constante <b>C</b> puede tomar distintos valores.
+                            </p>
+                        </div>
+                    </article>
+                </section>
+                <section class="bottom-grid" id="biblioteca">
+                    <article class="panel library-panel">
+                        <div class="panel-heading">
+                            <div>
+                                <div class="eyebrow">PARA EMPEZAR</div>
+                                <h2>Modelos frecuentes</h2>
+                            </div>
+                            <a class="text-link" href="#resolver">
+                                Ir al editor →
+                            </a>
+                        </div>
+                        <div class="model-list">
+                            <button class="model-row" data-example="decay">
+                                <span class="model-icon lilac">
+                                    e<sup>−t</sup>
+                                </span>
+                                <span>
+                                    <b>Crecimiento y decaimiento</b>
+                                    <small>y' = ky · Primer orden</small>
+                                </span>
+                                <span class="row-arrow">↗</span>
+                            </button>
+                            <button class="model-row" data-example="newton">
+                                <span class="model-icon aqua">T(t)</span>
+                                <span>
+                                    <b>Enfriamiento de Newton</b>
+                                    <small>
+                                        T' = −k(T − Tₐ) · Primer orden
+                                    </small>
+                                </span>
+                                <span class="row-arrow">↗</span>
+                            </button>
+                            <button class="model-row" data-example="second">
+                                <span class="model-icon peach">y″</span>
+                                <span>
+                                    <b>Movimiento oscilatorio</b>
+                                    <small>
+                                        y″ + ω²y = 0 · Segundo orden
+                                    </small>
+                                </span>
+                                <span class="row-arrow">↗</span>
+                            </button>
+                        </div>
+                    </article>
+                    <article class="panel concepts-panel" id="conceptos">
+                        <div class="eyebrow">GUÍA RÁPIDA</div>
+                        <h2>¿Qué debes identificar?</h2>
+                        <div class="concept">
+                            <span>01</span>
+                            <div>
+                                <b>Orden</b>
+                                <p>
+                                    La derivada de mayor orden que aparece.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="concept">
+                            <span>02</span>
+                            <div>
+                                <b>Grado</b>
+                                <p>
+                                    La potencia de la derivada de mayor orden,
+                                    si la ecuación es polinómica en derivadas.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="concept">
+                            <span>03</span>
+                            <div>
+                                <b>Linealidad</b>
+                                <p>
+                                    La función y sus derivadas aparecen en
+                                    primer grado y no se multiplican entre sí.
+                                </p>
+                            </div>
+                        </div>
+                    </article>
+                </section>
+                <section class="panel block" id="metodos">
+                    <div class="panel-heading"><div><div class="eyebrow">TEORÍA</div><h2>Métodos de solución</h2><p>Resumen de los métodos principales de un curso de EDO. Los que tienen botón se pueden resolver en el laboratorio.</p></div></div>
+                    <details class="method"><summary><b>Variables separables</b><code>y' = f(t)·g(y)</code></summary><p>Escribe dy/g(y) = f(t) dt e integra ambos lados. Despeja y y usa y(t₀) para fijar C. Ejemplo: y' = ty → y = Ce^(t²/2).</p><button class="secondary-btn" data-eq="7">Probar en el solver →</button></details><details class="method"><summary><b>Lineal de 1.er orden</b><code>y' + p(t)y = q(t)</code></summary><p>Factor integrante μ = e^(∫p dt). Entonces (μy)' = μq, así que y = (1/μ)(∫μq dt + C). Ejemplo: y' + 2y = 3.</p><button class="secondary-btn" data-eq="0">Probar en el solver →</button></details><details class="method"><summary><b>Ecuaciones exactas</b><code>M dx + N dy = 0</code></summary><p>Es exacta si ∂M/∂y = ∂N/∂x. Busca F con F_x = M y F_y = N; la solución es F(x,y) = C.</p></details><details class="method"><summary><b>Bernoulli</b><code>y' + p y = q yⁿ</code></summary><p>Con v = y^(1−n) se transforma en una lineal de primer orden en v. Resuélvela y regresa a y.</p></details><details class="method"><summary><b>Homogéneas de grado cero</b><code>y' = f(y/x)</code></summary><p>Sustituye v = y/x (y = xv, y' = v + xv'). Queda una ecuación separable en v y x.</p></details><details class="method"><summary><b>Coeficientes constantes (2.º orden)</b><code>ay'' + by' + cy = 0</code></summary><p>Ecuación característica ar² + br + c = 0. Δ>0: C₁e^(r₁t)+C₂e^(r₂t). Δ=0: (C₁+C₂t)e^(rt). Δ<0 (α±βi): e^(αt)(C₁cosβt+C₂sinβt).</p><button class="secondary-btn" data-eq="1">Probar en el solver →</button></details><details class="method"><summary><b>Coeficientes indeterminados</b><code>ay'' + by' + cy = g(t)</code></summary><p>Propón y_p de la misma familia que g (polinomio, exponencial, seno/coseno). Si coincide con y_h multiplica por t (resonancia). Suma y = y_h + y_p.</p><button class="secondary-btn" data-eq="4">Probar en el solver →</button></details><details class="method"><summary><b>Variación de parámetros</b><code>y'' + p y' + q y = g</code></summary><p>Con soluciones y₁, y₂ y Wronskiano W: y_p = −y₁∫(y₂g/W)dt + y₂∫(y₁g/W)dt. Sirve para cualquier g(t).</p></details><details class="method"><summary><b>Transformada de Laplace</b><code>L{y'} = sY − y(0)</code></summary><p>Transforma la EDO en una ecuación algebraica: L{y''} = s²Y − s·y(0) − y'(0). Despeja Y(s) y aplica la inversa (fracciones parciales).</p></details><details class="method"><summary><b>Cauchy–Euler</b><code>x²y'' + axy' + by = 0</code></summary><p>Prueba y = x^m: m(m−1) + am + b = 0. Los casos de raíces son análogos a los de coeficientes constantes (con ln x).</p></details>
+                </section>
+                <section class="panel block" id="practica">
+                    <div class="panel-heading"><div><div class="eyebrow">PRÁCTICA</div><h2>Ejercicios con corrección automática</h2><p>Se genera un problema de valor inicial; escribe y(t) y el laboratorio comprueba tu respuesta numéricamente.</p></div><span class="soft-pill">Aciertos <b id="pScore">0 / 0</b></span></div>
+                    <div class="example-row"><label for="pLevel">Nivel</label><select id="pLevel"><option value="1">1 · Primer orden homogénea</option><option value="2">2 · Primer orden con constante</option><option value="3">3 · Segundo orden homogénea</option><option value="4">4 · Segundo orden con forzamiento</option></select><button class="secondary-btn" id="pNew">Nuevo ejercicio</button></div>
+                    <div class="practice-q"><code id="pEq"></code><small id="pIv"></small></div>
+                    <div class="equation-input-wrap"><span class="input-symbol">y(t)</span><input id="pAns" type="text" placeholder="Tu respuesta, ej. 2*exp(-3t) + 1" autocomplete="off" aria-label="Tu respuesta y(t)"></div>
+                    <div class="button-row"><button class="primary-btn" id="pCheck">Comprobar</button><button class="secondary-btn" id="pHintBtn">Pista</button><button class="secondary-btn" id="pShow">Ver solución paso a paso</button></div>
+                    <div class="notice" id="pFb"></div><p class="hint-text" id="pHint"></p><div id="pSol"></div>
+                </section>
+                <section class="panel block" id="simulador">
+                    <div class="panel-heading"><div><div class="eyebrow">LABORATORIO</div><h2>Simulador masa–resorte–amortiguador</h2><p>m·x'' + c·x' + k·x = F₀cos(ωt). Mueve los controles y observa amortiguamiento y resonancia.</p></div></div>
+                    <div class="sliders">
+                        <label>Masa m <b id="sMv"></b><input type="range" id="sM" min="0.5" max="5" step="0.5" value="1"></label>
+                        <label>Amortiguamiento c <b id="sCv"></b><input type="range" id="sC" min="0" max="6" step="0.1" value="0.4"></label>
+                        <label>Rigidez k <b id="sKv"></b><input type="range" id="sK" min="1" max="20" step="1" value="4"></label>
+                        <label>Fuerza F₀ <b id="sFv"></b><input type="range" id="sF" min="0" max="5" step="0.5" value="0"></label>
+                        <label>Frecuencia ω <b id="sWv"></b><input type="range" id="sW" min="0.5" max="6" step="0.1" value="2"></label>
+                        <label>Posición inicial x₀ <b id="sXv"></b><input type="range" id="sX" min="-3" max="3" step="0.5" value="1"></label>
+                    </div>
+                    <div class="notice" id="sInfo"></div>
+                    <div class="chart-wrap tall"><canvas id="simChart"></canvas></div>
+                </section>
+                <section class="panel block" id="asistente">
+                    <div class="panel-heading"><div><div class="eyebrow">ASISTENTE IA</div><h2>Tutor de ecuaciones diferenciales</h2><p>Resuelve ecuaciones con el motor del laboratorio y explica métodos. La IA resuelve cualquier ejercicio que escribas, apoyándose en el resultado verificado del motor cuando existe.</p></div></div>
+                    <div class="chat-log" id="chatLog" role="log" aria-live="polite"></div>
+                    <form class="chat-form" id="chatForm" onsubmit="return false"><input id="chatInput" aria-label="Pregunta para el asistente" maxlength="2000" placeholder="Escribe cualquier ejercicio: ecuación, problema en palabras o pregunta de teoría" autocomplete="off"><button class="primary-btn" id="chatSend" type="submit">Enviar</button></form>
+                    
+                </section>
+                
+                <footer>
+                    <span>∂ EDO LAB</span>
+                    <span>
+                        Laboratorio educativo de ecuaciones diferenciales
+                        ordinarias
+                    </span>
+                    <a href="#overview">Volver arriba ↑</a>
+                </footer>
+            </div>
+        </main>
+    </div>
+    <script>
+        if (typeof Chart === 'undefined' || typeof math === 'undefined') { document.getElementById('libBanner').hidden = false; }
+    </script>
+    <script src="script.js?v=7"></script>
+    <script src="engine.js?v=7"></script>
+    <script src="extra.js?v=7"></script>
+
+</body>
+
+</html>

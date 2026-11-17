@@ -1,0 +1,5 @@
+# Apache (XAMPP/hosting): no exponer archivos internos
+<FilesMatch "^(server\.js|prompt\.txt|package\.json|README\.md|\.env.*)$">
+  Require all denied
+</FilesMatch>
+Options -Indexes
